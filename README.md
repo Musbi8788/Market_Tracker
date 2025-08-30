@@ -6,7 +6,7 @@
 Traders in The Gambia—especially in markets like **Serekunda**—face unstable prices for goods like fish, vegetables, and imports.  
 Without real-time data, prices are inconsistent, causing **reduced profits** for sellers and **higher costs** for buyers.  
 
-
+ubfujrbucffcrvurcfhmutvicgr
 
 ## 💡 Solution  
 A **real-time market price tracker** that collects and shares verified prices, helping traders and buyers make informed decisions.  
