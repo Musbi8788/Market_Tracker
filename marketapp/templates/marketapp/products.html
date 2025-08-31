@@ -307,113 +307,163 @@
     </div>
 
     <script>
-        const urls = {
+    const urls = {
         home: "{% url 'marketapp:index' %}",
-        };
+    };
 
-        // Check if user is logged in
-const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-if (!currentUser) {
-    window.location.href = urls.home;
-}
+    // Check if user is logged in
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = urls.home;
+    }
 
-// Display greeting
-document.getElementById('userGreeting').textContent = `Hello, ${currentUser.firstName}!`;
+    // Display greeting
+    document.getElementById('userGreeting').textContent = `Hello, ${currentUser.firstName}!`;
 
-// Show dashboard only if seller
-if (currentUser.userType === "seller") {
-    document.getElementById('dashboardLink').style.display = "inline-block";
-}
+    // Show dashboard only if seller
+    if (currentUser.userType === "seller") {
+        document.getElementById('dashboardLink').style.display = "inline-block";
+    }
 
-
-
-        let allProducts = [];
-
-        // Load products from localStorage
-        function loadProducts() {
-            allProducts = JSON.parse(localStorage.getItem('products') || '[]');
-            filterAndDisplayProducts();
-        }
-
-        // Filter and display products
-        function filterAndDisplayProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const sortBy = document.getElementById('sortBy').value;
-
-            let filteredProducts = allProducts.filter(product => {
-                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
-                                    product.description.toLowerCase().includes(searchTerm);
-                const matchesCategory = !categoryFilter || product.category === categoryFilter;
-                
-                return matchesSearch && matchesCategory;
-            });
-
-            // Sort products
-            filteredProducts.sort((a, b) => {
-                switch (sortBy) {
-                    case 'newest':
-                        return new Date(b.createdAt) - new Date(a.createdAt);
-                    case 'oldest':
-                        return new Date(a.createdAt) - new Date(b.createdAt);
-                    case 'price-low':
-                        return a.price - b.price;
-                    case 'price-high':
-                        return b.price - a.price;
-                    case 'name':
-                        return a.name.localeCompare(b.name);
-                    default:
-                        return 0;
-                }
-            });
-
-            displayProducts(filteredProducts);
-        }
-
-        // Display products in the grid
-        function displayProducts(products) {
-            const container = document.getElementById('productsGrid');
-
-            if (products.length === 0) {
-                container.innerHTML = `
-                    <div class="no-products" style="grid-column: 1 / -1;">
-                        <h3>No products found</h3>
-                        <p>Try adjusting your search criteria or check back later for new products.</p>
-                    </div>
-                `;
-                return;
+    // ✅ Preload demo products if none exist
+    if (!localStorage.getItem('products')) {
+        const demoProducts = [
+            {
+                name: "Fresh Tomatoes",
+                price: 150,
+                sellerName: "Fatou's Farm",
+                sellerPhone: "+220 1234567",
+                description: "Locally grown fresh tomatoes, perfect for cooking.",
+                category: "Foods & Vegetables",
+                image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg"
+            },
+            {
+                name: "Groundnut Oil (5L)",
+                price: 750,
+                sellerName: "Buba Traders",
+                sellerPhone: "+220 9876543",
+                description: "Pure Gambian groundnut oil, 100% organic.",
+                category: "Oils & Condiments",
+                image: "https://i.pinimg.com/736x/19/b4/41/19b441b189d5f241b3a096dae419963e.jpg"
+            },
+            {
+                name: "Rice 50kg Bag",
+                price: 2500,
+                sellerName: "Mariama Wholesalers",
+                sellerPhone: "+220 1122334",
+                description: "High quality imported rice in 50kg bag.",
+                category: "Grains",
+                image: "https://i.pinimg.com/736x/d0/32/51/d032516b7931458b6c1ec35cee2b7dea.jpg"
+            },
+            {
+                name: "Fresh Fish (Tilapia)",
+                price: 400,
+                sellerName: "Ebrima Fisheries",
+                sellerPhone: "+220 5566778",
+                description: "Freshly caught tilapia from Tanji.",
+                category: "Protein & Fish",
+                image: "https://i.pinimg.com/736x/d0/6f/a4/d06fa4e7542a17e2b2b0a3f4c7a07fba.jpg"
+            },
+            {
+                name: "Mangoes (Dozen)",
+                price: 120,
+                sellerName: "Awa Fruit Garden",
+                sellerPhone: "+220 4433221",
+                description: "Sweet and ripe Gambian mangoes, sold per dozen.",
+                category: "Fruits",
+                image: "https://upload.wikimedia.org/wikipedia/commons/9/90/Hapus_Mango.jpg"
             }
+        ];
+        localStorage.setItem('products', JSON.stringify(demoProducts));
+    }
 
-            container.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <img src="${product.image || '/placeholder.svg?height=200&width=300&query=' + encodeURIComponent(product.name)}" 
-                        alt="${product.name}" class="product-image">
-                    <div class="product-info">
-                        <h3 class="product-name">${product.name}</h3>
-                        <div class="product-price">D${product.price.toFixed(2)}</div>
-                        <span class="product-category">${product.category}</span>
-                        <p class="product-description">${product.description}</p>
-                        <div class="seller-info">
-                            <div class="seller-name">Sold by: ${product.sellerName}</div>
-                            <div>Contact: ${product.sellerPhone}</div>
-                        </div>
+    let allProducts = [];
+
+    // Load products from localStorage
+    function loadProducts() {
+        allProducts = JSON.parse(localStorage.getItem('products') || '[]');
+        filterAndDisplayProducts();
+    }
+
+    // Filter and display products
+    function filterAndDisplayProducts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        const sortBy = document.getElementById('sortBy').value;
+
+        let filteredProducts = allProducts.filter(product => {
+            const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                product.description.toLowerCase().includes(searchTerm);
+            const matchesCategory = !categoryFilter || product.category === categoryFilter;
+            
+            return matchesSearch && matchesCategory;
+        });
+
+        // Sort products
+        filteredProducts.sort((a, b) => {
+            switch (sortBy) {
+                case 'newest':
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                case 'oldest':
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                case 'price-low':
+                    return a.price - b.price;
+                case 'price-high':
+                    return b.price - a.price;
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                default:
+                    return 0;
+            }
+        });
+
+        displayProducts(filteredProducts);
+    }
+
+    // Display products in the grid
+    function displayProducts(products) {
+        const container = document.getElementById('productsGrid');
+
+        if (products.length === 0) {
+            container.innerHTML = `
+                <div class="no-products" style="grid-column: 1 / -1;">
+                    <h3>No products found</h3>
+                    <p>Try adjusting your search criteria or check back later for new products.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = products.map(product => `
+            <div class="product-card">
+                <img src="${product.image || '/placeholder.svg?height=200&width=300&query=' + encodeURIComponent(product.name)}" 
+                    alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">${product.name}</h3>
+                    <div class="product-price">D${product.price.toFixed(2)}</div>
+                    <span class="product-category">${product.category}</span>
+                    <p class="product-description">${product.description}</p>
+                    <div class="seller-info">
+                        <div class="seller-name">Sold by: ${product.sellerName}</div>
+                        <div>Contact: ${product.sellerPhone}</div>
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+        `).join('');
+    }
 
-        // Add event listeners for filters
-        document.getElementById('searchInput').addEventListener('input', filterAndDisplayProducts);
-        document.getElementById('categoryFilter').addEventListener('change', filterAndDisplayProducts);
-        document.getElementById('sortBy').addEventListener('change', filterAndDisplayProducts);
+    // Add event listeners for filters
+    document.getElementById('searchInput').addEventListener('input', filterAndDisplayProducts);
+    document.getElementById('categoryFilter').addEventListener('change', filterAndDisplayProducts);
+    document.getElementById('sortBy').addEventListener('change', filterAndDisplayProducts);
 
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = urls.home;
-        }
+    function logout() {
+        localStorage.removeItem('currentUser');
+        window.location.href = urls.home;
+    }
 
-        // Initialize page
-        loadProducts();
-    </script>
+    // Initialize page
+    loadProducts();
+</script>
 </body>
 </html>
