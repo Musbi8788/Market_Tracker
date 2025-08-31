@@ -1,23 +1,18 @@
-# 📊 Market Price Tracker  
+# 📊 Market Place  
 
 **Hackathon Project — MyFarm Dev**  
 
-## 🚀 Problem  
-Traders in The Gambia—especially in markets like **Serekunda**—face unstable prices for goods like fish, vegetables, and imports.  
-Without real-time data, prices are inconsistent, causing **reduced profits** for sellers and **higher costs** for buyers.  
+## 🚀 Problem & 💡 Solution  
+In many local markets, it’s hard to compare prices or even find who is selling goods. Our project solves this by putting products and seller information in one place, so buyers can easily find what they need and contact the seller.
 
-
-
-## 💡 Solution  
-A **real-time market price tracker** that collects and shares verified prices, helping traders and buyers make informed decisions.  
 
 ---
 
 ## ✨ Key Features  
-- 📌 Real-time price updates for key goods  
-- 📊 Price history & trends  
+- 📌 Online Market Where buyers can views the products 
 - 👥 Multi-role access: traders, admins, public  
-- 📱 Mobile-friendly UI  
+- 📱 Mobile-friendly UI
+- NOTE THEY CAN'T DO ONLINE PAYMENT
 
 ---
 
@@ -29,10 +24,12 @@ A **real-time market price tracker** that collects and shares verified prices, h
 
 --- 
 # Demo pages
-Visit the site: [Market Price Tracker](https://market-tracker-onzf.onrender.com/)
+Visit the site: [Market Place](https://market-tracker-onzf.onrender.com/)
 
 ## Register Page 
 ![Register Page](photos/1img.png)
+If you register as a client you can only view products.
+But if you register as a seller you can post products and view them.
 
 ## Log In Page
 ![Log In Page](photos/4img.png)
