@@ -245,8 +245,14 @@
             <div class="nav-brand">Products Marketplace</div>
             <div class="nav-links">
                 <span id="userGreeting" style="color: white;"></span>
-                 <a href="{% url 'marketapp:dashboard' %}"><button class="logout-btn" onclick=dashboard()">Dashboard</button>
+
+                 <!-- <a href="{% url 'marketapp:dashboard' %}"><button class="logout-btn" onclick=dashboard()">Dashboard</button>
+                </a> -->
+                <a href="{% url 'marketapp:dashboard' %}" id="dashboardLink" style="display:none;">
+                <button class="logout-btn">Dashboard</button>
                 </a>
+
+
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
         </div>
@@ -306,13 +312,20 @@
         };
 
         // Check if user is logged in
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) {
-            window.location.href = urls.home ;
-        }
+const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+if (!currentUser) {
+    window.location.href = urls.home;
+}
 
-        // Display user greeting
-        document.getElementById('userGreeting').textContent = `Hello, ${currentUser.firstName}!`;
+// Display greeting
+document.getElementById('userGreeting').textContent = `Hello, ${currentUser.firstName}!`;
+
+// Show dashboard only if seller
+if (currentUser.userType === "seller") {
+    document.getElementById('dashboardLink').style.display = "inline-block";
+}
+
+
 
         let allProducts = [];
 
