@@ -1,6 +1,6 @@
 asgiref==3.9.2
 dj-database-url==3.0.1
-Django==5.2.5
+Django==5.2.7
 django-address==0.2.8
 django-address-model==1.0.4
 django-environ==0.12.0
